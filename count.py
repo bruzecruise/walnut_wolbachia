@@ -5,7 +5,7 @@ import pandas as pd
 sam_file = sys.argv[1]
 
 samRegEx = re.compile("sam")
-csv_file = re.sub(samRegEx, "count.csv", sam_file)
+csv_file = re.sub(samRegEx, "count_metadata.csv", sam_file)
 
 
 # loop through and create a set with all the regex hits.
@@ -42,6 +42,15 @@ for n in addresses:
 df = pd.DataFrame.from_dict(samples, orient='index').reset_index()
 df.columns = ['name','count']
 sorted_df = df.sort_values(by=['count'], ascending=False)
-sorted_df.to_csv(csv_file)
+
+
+sel_dat = sorted_df[['name', 'count']]
+sel_dat['name'] = sel_dat['name'].str.replace(r'_', "")
+metadata = pd.read_csv("barcode_1_metadata.csv")
+
+merged_dat = pd.merge(sel_dat, metadata, on='name')
+merged_dat.to_csv(csv_file)
+
+print(merged_dat)
 
 print("finished counting reads!")

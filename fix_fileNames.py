@@ -18,7 +18,8 @@ for line in sam:
     else:
         line = re.sub(search_text, "", line)
         line = re.sub(r'(^mmg.)', "", line) 
-        line = re.sub(r'(^HS.)', "HS", line)
+        line = re.sub(r'(^HS[.]*)', "HS", line)
+        line = re.sub(r'(^HS[0-9]+)([.]*)', r'\1', line)
         line = re.sub(r'(^SPE[.]+)', "SPE", line)
         outfile.write(line + "\n")
 outfile.close()
@@ -26,3 +27,4 @@ sam.close()
 
 print ("finished fixing read names!")
 
+# need to pfix match groups
