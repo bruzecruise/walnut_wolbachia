@@ -4,7 +4,10 @@ import re
 import sys
 import pandas as pd
 
+# load in files. Need input same file that has had its file names fixed.
+# and csv file with metadata for the barcodes
 sam_file = sys.argv[1]
+input_csv = sys.argv[2]
 
 samRegEx = re.compile("sam")
 csv_file = re.sub(samRegEx, "count_metadata.csv", sam_file)
@@ -48,7 +51,7 @@ sorted_df = df.sort_values(by=['count'], ascending=False)
 
 sel_dat = sorted_df[['name', 'count']]
 sel_dat['name'] = sel_dat['name'].str.replace(r'_', "")
-metadata = pd.read_csv("barcode_1_metadata.csv")
+metadata = pd.read_csv(input_csv)
 
 merged_dat = pd.merge(sel_dat, metadata, on='name')
 merged_dat.to_csv(csv_file)
