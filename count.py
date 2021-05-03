@@ -1,5 +1,7 @@
 #!/bin/python
 
+# this counts the number of reads for each individual
+# inputs are 1 = fixed samfile and 2 = metadata csv
 import re
 import sys
 import pandas as pd
@@ -45,17 +47,21 @@ for n in addresses:
 
 # make csv file for the count data
 df = pd.DataFrame.from_dict(samples, orient='index').reset_index()
-df.columns = ['name','count']
+df.columns = ['name', 'count']
 sorted_df = df.sort_values(by=['count'], ascending=False)
 
-
+# fix headers and sort data frame
 sel_dat = sorted_df[['name', 'count']]
 sel_dat['name'] = sel_dat['name'].str.replace(r'_', "")
-metadata = pd.read_csv(input_csv)
+sel_dat['name'] = sel_dat['name'].astype(int)
 
-merged_dat = pd.merge(sel_dat, metadata, on='name')
+# import metadata csv
+metadata = pd.read_csv(input_csv)
+metadata['name'] = metadata['name'].astype(int)
+
+# merge dataframes with inner join
+merged_dat = pd.merge(sel_dat, metadata, how='inner', on='name')
 merged_dat.to_csv(csv_file)
 
 print(merged_dat)
-
 print("finished counting reads!")
