@@ -30,3 +30,4 @@ sam.close()
 print ("finished fixing read names!")
 
 # need to pfix match groups
+    
