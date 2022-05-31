@@ -1,7 +1,13 @@
 #!/bin/python
 
-import sys
+# create folders named after all unique sequence names
+# move all matching fastq  reads into appropriate folders
 import re
+import sys
+
+
+###
+
 
 fastq_file = sys.argv[1]
 fastq_RegEx = re.compile("fq")
@@ -28,5 +34,3 @@ outfile.close()
 fastq.close()
 
 print ("finished fixing read names!")
-
-# need to pfix match groups
